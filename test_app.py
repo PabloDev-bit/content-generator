@@ -24,5 +24,16 @@ class GenerateEndpointTestCase(unittest.TestCase):
         self.assertIn('result', data)
         self.assertEqual(data['result'], 'Voici une réponse générée')
 
+    @patch('app.openai.Image.create')
+    def test_generate_image_endpoint(self, mock_image_create):
+        mock_image_create.return_value = {
+            'data': [{'url': 'http://example.com/image.png'}]
+        }
+        response = self.client.post('/generate-image', json={'prompt': 'un chat'})
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertIn('image_url', data)
+        self.assertEqual(data['image_url'], 'http://example.com/image.png')
+
 if __name__ == '__main__':
     unittest.main()
