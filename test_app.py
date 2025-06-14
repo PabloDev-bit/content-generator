@@ -2,12 +2,13 @@ import types
 import unittest
 from unittest.mock import patch
 
-from app import app
+from app import app, openai
 
 class GenerateEndpointTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
         app.testing = True
+        openai.api_key = "test"
 
     @patch('app.openai.ChatCompletion.create')
     def test_generate_endpoint(self, mock_create):
