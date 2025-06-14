@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Générateur d'images</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        #promptInput { width: 300px; padding: 8px; }
+        #generateBtn { padding: 8px 12px; margin-left: 8px; }
+        #resultImage { display: block; margin-top: 20px; max-width: 512px; }
+    </style>
+</head>
+<body>
+    <h1>Générateur d'images DALL·E</h1>
+    <input type="text" id="promptInput" placeholder="Décrivez l'image" />
+    <button id="generateBtn">Générer une image</button>
+    <img id="resultImage" src="" alt="Image générée" />
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const prompt = document.getElementById('promptInput').value;
+            if (!prompt) return;
+            const response = await fetch('/generate-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
+            });
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('resultImage').src = data.image_url;
+            }
+        });
+    </script>
+</body>
+</html>
